@@ -1,0 +1,19 @@
+version: 2
+jobs:
+  test:
+    docker:
+      - image: cimg/base:2020.01
+    steps:
+      - checkout
+      - run:
+         name: run trivy
+         command: |
+          mkdir results
+          ./trivy -f template -o results/junit.xml --template @junit.tpl alpine:3.10.2
+      - store_test_results:
+          path: results
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test
